@@ -41,3 +41,13 @@ def get_sorted_tasks_view(request):
 
     return Response(sorted_tasks)
 
+@api_view(["DELETE"])
+def delete_task(request):
+    task_id = request.query_params.get("id")
+    try:
+        task = Tasks.objects.get(id=task_id)
+        task.delete()
+        return Response({"message": "Task deleted successfully"}, status=status.HTTP_200_OK)
+    except Tasks.DoesNotExist:
+        return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+    

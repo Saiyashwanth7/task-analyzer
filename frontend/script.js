@@ -90,14 +90,20 @@ function displayTasks(tasks) {
         return `
             <div class="task-card">
                 <div class="task-header">
-                    <div>
-                        <span style="color: #999; font-size: 20px; font-weight: bold;">#${index + 1}</span>
-                        <h3 class="task-title">${task.title}</h3>
-                    </div>
-                    <span class="priority-badge ${priorityClass}">
-                        Score: ${task.priority_score}
-                    </span>
-                </div>
+    <div>
+        <span style="color: #999; font-size: 20px; font-weight: bold;">#${index + 1}</span>
+        <h3 class="task-title">${task.title}</h3>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <span class="priority-badge ${priorityClass}">
+            Score: ${task.priority_score}
+        </span>
+
+        <button class="btn-delete" onclick="deleteTask(${task.id})">🗑️</button>
+    </div>
+</div>
+
                 
                 <div class="task-details">
                     <div class="detail-item">
@@ -151,4 +157,25 @@ function getPriorityClass(score) {
     if (score >= 70) return 'priority-high';
     if (score >= 40) return 'priority-medium';
     return 'priority-low';
+}
+async function deleteTask(id) {
+    if (!confirm("Are you sure you want to delete this task?")) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/tasks/delete/?id=${id}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete task');
+        }
+
+        alert("🗑️ Task deleted successfully!");
+
+        // Refresh analyzed list
+        analyzeBtn.click();
+
+    } catch (error) {
+        alert("❌ Error deleting task: " + error.message);
+    }
 }

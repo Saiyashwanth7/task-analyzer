@@ -320,3 +320,18 @@ input:focus {
         grid-template-columns: 1fr;
     }
 }
+.btn-delete {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.btn-delete:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+}
