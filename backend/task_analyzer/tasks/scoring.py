@@ -86,13 +86,17 @@ def calculate_dependencies(taskid, all_tasks):
             blocked_tasks += 1
     if blocked_tasks <= 0:
         score = 0
+        reason='No tasks are blocked by this task'
     elif blocked_tasks <= 1:
         score = 30
+        reason
     elif blocked_tasks <= 2:
         score = 60
+        reason = f"This task is blocking {blocked_tasks} tasks"
     else:
         score = 100
-    reason = "sdfg"
+        reason = f"This task is blocking {blocked_tasks} tasks"
+    
     return score, reason
 
 def calculate_backward_dependency(task, all_task):
