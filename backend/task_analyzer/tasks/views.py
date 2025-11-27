@@ -25,13 +25,19 @@ def add_task(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(["GET"])
+@api_view(["GET","POST"])
 def get_sorted_tasks_view(request):
-    tasks = Tasks.objects.all()
-    tasks_serializer = TaskSerializer(tasks, many=True)
-    tasks_data = tasks_serializer.data
+    strategy = request.query_params.get("strategy", "Smart Balance")
+    if request.method == "POST":
+        tasks_data = request.data.get("tasks", [])
+        if not tasks_data:
+            return Response({"error": "No tasks provided"}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        tasks = Tasks.objects.all()
+        tasks_serializer = TaskSerializer(tasks, many=True)
+        tasks_data = tasks_serializer.data
 
-    sorted_tasks = get_sorted_tasks(tasks_data)
+    sorted_tasks = get_sorted_tasks(tasks_data,strategy)
 
     return Response(sorted_tasks)
 

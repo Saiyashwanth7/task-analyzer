@@ -164,7 +164,7 @@ def calculate_priority_score(task, all_tasks, strategy="Smart Balance"):
         },
     }
 
-    weights = STRATEGY_WEIGHTS.get(strategy, STRATEGY_WEIGHTS["Smart Balance"])
+    weights = STRATEGY_WEIGHTS.get(strategy)
     urgency_score, urgency_reason = calculate_urgency(task.get("due_date"))
     importance_score, importance_reason = calculate_importance(task.get("importance"))
     effort_score, effort_reason = calculate_effort(task.get("estimated_hours"))
@@ -180,17 +180,29 @@ def calculate_priority_score(task, all_tasks, strategy="Smart Balance"):
     )
     dependency_muliplier,multiplier_reason=calculate_backward_dependency(task,all_tasks)
     final_score=base_score*dependency_muliplier
-    return final_score
+    
+    #explanation on why that particular task is proritized at it's position
+    explanation = {
+        'base_score': round(base_score, 2),
+        'final_score': round(final_score, 2),
+        'urgency': {'score': urgency_score, 'reason': urgency_reason},
+        'importance': {'score': importance_score, 'reason': importance_reason},
+        'effort': {'score': effort_score, 'reason': effort_reason},
+        'forward_deps': {'score': dependency_score, 'reason': dependency_reason},
+        'backward_deps': {'multiplier': dependency_muliplier, 'reason': multiplier_reason}
+    }
+    return final_score,explanation
 
 def prioritized_tasks(all_tasks, strategy="Smart Balance"):
     scored_tasks = []
     for task in all_tasks:
         result = calculate_priority_score(task, all_tasks, strategy)
+        priority_score, explanation = result
         # Create new dict with priority info
         task_with_score = {
             **task,  # Copy all original fields
-            'priority_score': result,
-            #'priority_explanation': result['explanation']
+            'priority_score': round(priority_score, 2),
+            'priority_explanation': explanation
         }
         scored_tasks.append(task_with_score)
     return scored_tasks
