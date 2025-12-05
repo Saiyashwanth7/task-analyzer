@@ -456,14 +456,6 @@ pytest test_api.py -v --cov=tasks --cov-report=html
 
 ---
 
-
-## Future Improvements
-
-1. **Delete functionality**: Consider weekends/holidays when calculating urgency
-2. **Circular Dependency Detection**: Use graph traversal (DFS) to detect and warn about circular dependencies
-3. **Extended Test Coverage**: Add tests for scoring algorithm edge cases, dependency chains, and strategy variations
-4. **Task History**: Track when tasks were completed and how long they actually took vs estimated
-
 ## 👤 Author
 
 Sai Yashwanth Dasari
