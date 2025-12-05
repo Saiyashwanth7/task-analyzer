@@ -17,6 +17,14 @@
         <!-- Add Task Form -->
         <section class="add-task-section">
             <h2>Add New Task</h2>
+            <!-- In index.html, after the form -->
+<div class="form-group">
+    <label for="bulkJson">Or paste JSON array of tasks:</label>
+    <textarea id="bulkJson" rows="5" placeholder='[{"title":"Task 1",...}]'></textarea>
+    <button type="button" id="bulkAddBtn" class="btn btn-secondary">
+        Add Bulk Tasks
+    </button>
+</div>
             <form id="addTaskForm" class="task-form">
                 <div class="form-row">
                     <div class="form-group">

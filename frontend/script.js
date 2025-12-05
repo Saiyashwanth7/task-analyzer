@@ -179,3 +179,22 @@ async function deleteTask(id) {
         alert("❌ Error deleting task: " + error.message);
     }
 }
+
+// In script.js
+document.getElementById('bulkAddBtn').addEventListener('click', async () => {
+    const jsonText = document.getElementById('bulkJson').value;
+    try {
+        const tasks = JSON.parse(jsonText);
+        for (const task of tasks) {
+            await fetch(`${API_BASE}/tasks/add/`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(task)
+            });
+        }
+        alert(`✅ Added ${tasks.length} tasks!`);
+        document.getElementById('bulkJson').value = '';
+    } catch (error) {
+        alert('❌ Invalid JSON: ' + error.message);
+    }
+});
