@@ -2,22 +2,18 @@
 # exit on error
 set -o errexit
 
-# Install dependencies
+# 1. Install dependencies from the root
 pip install -r requirements.txt
 
-# Use 'find' to locate manage.py if it's not in the root
-MANAGE_PY=$(find . -name "manage.py" | head -n 1)
+# 2. Enter the backend directory where manage.py lives
+cd backend/task_analyzer
 
-if [ -z "$MANAGE_PY" ]; then
-    echo "Error: manage.py not found!"
-    exit 1
-fi
+# 3. Run Django commands
+python manage.py collectstatic --no-input
+python manage.py migrate
 
-python "$MANAGE_PY" collectstatic --no-input
-python "$MANAGE_PY" migrate
-
-# Create superuser
-python "$MANAGE_PY" shell << END
+# 4. Create superuser
+python manage.py shell << END
 import os
 from django.contrib.auth import get_user_model
 User = get_user_model()
